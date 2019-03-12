@@ -1,0 +1,76 @@
+#!/bin/bash
+
+if [ $# -ne 1 ]
+  then
+	echo "$0 loop"
+	exit
+  fi
+
+mkdir -p test_result
+
+# strong scaling
+out=0.0
+for size in 100 1000
+ do
+   rm -f test_result/dgemm_$size.txt 
+   for i in 1 2 4 6 8 10 12 16 
+     do
+      export OMP_NUM_THREADS=$i
+      flop=0.0
+      for loop in `seq 1 $1`
+         do
+                out=`salloc -N 1 -w c15 ./omp_dgemm $size | grep "result" | awk '{print $5}'`
+                flop=`echo "$flop + $out" | bc`
+                wait
+         done
+       echo "$i `echo "$flop/$1" | bc -l`" >> test_result/dgemm_$size.txt 
+     done
+  done
+
+wait
+
+for size in 100 1000 
+  do
+   rm -f test_result/dtrsm_$size.txt
+   for i in 1 2 4 6 8 10 12 16 
+     do
+      export OMP_NUM_THREADS=$i
+      flop=0.0
+      for loop in `seq 1 $1`
+         do
+                out=`salloc -N 1 -w c15 ./omp_dtrsm $size L | grep "result" | awk '{print $3}'`
+                flop=`echo "$flop + $out" | bc`
+                wait
+         done
+       echo "$i `echo "$flop/$1" | bc -l`" >> test_result/dtrsm_$size.txt
+     done
+  done
+
+# weak scaling
+   rm -f test_result/dtrsm_weak.txt
+   for i in 1 2 4 6 8 10 12 16 
+     do
+      export OMP_NUM_THREADS=$i
+      flop=0.0
+      for loop in `seq 1 $1`
+         do
+                out=`salloc -N 1 -w c15 ./omp_dtrsm $((i*100)) L | grep "result" | awk '{print $3}'`
+                flop=`echo "$flop + $out" | bc`
+                wait
+         done
+       echo "$i `echo "$flop/$1" | bc -l`" >> test_result/dtrsm_weak.txt
+      done
+
+   rm -f test_result/dgemm_weak.txt
+   for i in 1 2 4 6 8 10 12 16 
+     do
+      export OMP_NUM_THREADS=$i
+      flop=0.0
+      for loop in `seq 1 $1`
+         do
+                out=`salloc -N 1 -w c15 ./omp_dgemm $((i*100)) | grep "result" | awk '{print $5}'`
+                flop=`echo "$flop + $out" | bc`
+                wait
+         done
+       echo "$i `echo "$flop/$1" | bc -l`" >> test_result/dgemm_weak.txt
+     done

@@ -1,0 +1,7 @@
+command:
+    xGEMM: 
+	serial: salloc -N 1 -w c15 ./seq_dgemm M [N K]
+	omp: salloc -N 1 -w c15 ./omp_dgemm M [N K]  
+    xTRSM:
+        serial: salloc -N 1 -w c15 ./seq_dtrsm M [N] U/L
+        omp: salloc -N 1 -w c15 ./omp_dtrsm M U/L 
