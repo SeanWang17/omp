@@ -1,0 +1,16 @@
+result: correct, threadNum 5 Performance: 0.388275
+result: correct, threadNum 6 Performance: 0.465721
+result: correct, threadNum 7 Performance: 0.539798
+result: correct, threadNum 8 Performance: 0.608499
+result: correct, threadNum 9 Performance: 0.695077
+result: correct, threadNum 10 Performance: 3.037169
+result: correct, threadNum 11 Performance: 0.839437
+result: correct, threadNum 12 Performance: 3.900198
+result: correct, threadNum 13 Performance: 1.024379
+result: correct, threadNum 14 Performance: 1.088803
+result: correct, threadNum 15 Performance: 1.171356
+result: correct, threadNum 16 Performance: 4.877299
+result: correct, threadNum 17 Performance: 1.336681
+result: correct, threadNum 18 Performance: 5.700235
+result: correct, threadNum 19 Performance: 1.486291
+result: correct, threadNum 20 Performance: 1.440101

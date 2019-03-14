@@ -1,8 +1,3 @@
-/* 
- * CS594 openmp homework
- * omp_dtrsm.c
- * Qinglei Cao
- */
 #include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
@@ -14,18 +9,12 @@
 #define B(i, j) B[(i)*N+(j)]
 #define B_mul(i, j) B_mul[(i)*N+(j)]
 
-/* 
- * solve A * X =  B, A is a lower or upper triangular matrix;
- * A is M*M matrix, X is M*N matrix, B is M*N matrix
- * In this homework, ignore transpose
- */ 
 
-/* forward substitution, A is lower triangular matrix */
 void forward(int M, int N, double *A, double *X, double *B){
   int i, j, k, tid, num_thread;
   double temp;
 
-  printf("lower triangular matrix\n");
+  //printf("lower triangular matrix\n");
 #pragma omp parallel private(i, j, k, tid) 
   {
     tid = omp_get_thread_num();
@@ -44,12 +33,11 @@ void forward(int M, int N, double *A, double *X, double *B){
   }
 }
 
-/* backward substitution, A is upper triangular matrix */
 void backward(int M, int N, double *A, double *X, double *B){
   int i, j, k, tid, num_thread;
   double temp;
 
-  printf("upper triangular matrix\n");
+  //printf("upper triangular matrix\n");
 #pragma omp parallel private(i, j, k, tid) 
   {
     tid = omp_get_thread_num();
@@ -80,17 +68,22 @@ void print_m(int M, int N, double *A){
 }
 
 int main(int argc, char *argv[]){
-  int i, j, k, M, N;
+  int i, j, k, M, N, tNum;
+  tNum = 5;
   char *uplo = "L";
   double time_start, time_end, time;
 
-  if(!((4 == argc) || (3 == argc))){
+  if(!((4 == argc) || (3 == argc) || (5==argc))){
       printf("Usage: ./seq_dgemm M N [U/L]\n");
       printf("or Usage: ./seq_dgemm N [U/L]\n");
       exit(1);
   } 
-
-  if((4 == argc)){
+  if(5==argc){
+      M = atoi(argv[1]);
+      N = atoi(argv[2]);
+      uplo = argv[3];
+      tNum = atoi(argv[4]);}
+  else if((4 == argc)){
       M = atoi(argv[1]);
       N = atoi(argv[2]);
       uplo = argv[3];
@@ -99,8 +92,8 @@ int main(int argc, char *argv[]){
       N = atoi(argv[1]);
       uplo = argv[2];
    }
-
-  double flop = (double)M*(double)M*(double)N/2.0; /* inside the loop, one multiply */
+  omp_set_num_threads( tNum );
+  double flop = (double)M*(double)M*(double)N/2.0; 
   
   double *A = (double *) calloc(M*M, sizeof(double));
   double *X = (double *) calloc(M*N, sizeof(double));
@@ -137,21 +130,23 @@ int main(int argc, char *argv[]){
   time_end = omp_get_wtime();
   time = time_end - time_start;
 
-  /* check the correctness */
-  /* get A * X */
   for(i = 0; i < M; i++)
     for(j = 0; j < N; j++ )
       for(k = 0; k < M; k++)
         B_mul(i, j) += A(i, k) * X(k, j);
 
-/*
-  puts("A:"); print_m(M, M, A);
-  puts("X:"); print_m(M, N, X);
-  puts("B:"); print_m(M, N, B);
-  puts("B_mul:"); print_m(M, N, B_mul);
-*/
-
-  printf("result: %d, %lf\n", M, 1.0e-9*flop/time);
+ // puts("A:"); print_m(M, M, A);
+ // puts("X:"); print_m(M, N, X);
+ // puts("B:"); print_m(M, N, B);
+ // puts("AX:"); print_m(M, N, B_mul);
+double diff=0.0;
+  for(i = 0; i < M; i++){
+      for(j = 0; j < N; j++)
+        {diff = (diff > fabs(B(i,j)-B_mul(i,j)))? diff: fabs(B(i,j)-B_mul(i,j));
+        }
+}
+  printf("MaxDifference %e threadNum %d performance: %lf\n", diff, tNum, 1.0e-9*flop/time);
+  //printf("MaxDifference %e size %d performance: %lf\n", diff, M, 1.0e-9*flop/time);
 
   free(A);
   free(B);

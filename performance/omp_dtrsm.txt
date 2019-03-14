@@ -1,0 +1,17 @@
+MaxDifference 1.954496e+10 size 100 performance: 0.069578
+MaxDifference 4.984987e+21 size 200 performance: 0.290555
+MaxDifference 9.500213e+36 size 300 performance: 0.444673
+MaxDifference 2.800525e+64 size 400 performance: 0.545170
+MaxDifference 1.622871e+71 size 500 performance: 0.589925
+MaxDifference 7.511395e+92 size 600 performance: 0.702199
+MaxDifference 2.500025e+104 size 700 performance: 0.652516
+MaxDifference 3.173011e+148 size 800 performance: 0.650194
+MaxDifference 1.693231e+164 size 900 performance: 0.691347
+MaxDifference 8.305833e+186 size 1000 performance: 0.663766
+MaxDifference 1.991462e+193 size 1100 performance: 0.710993
+MaxDifference 4.170114e+177 size 1200 performance: 0.648934
+MaxDifference 8.749121e+212 size 1300 performance: 0.667933
+MaxDifference 2.840527e+253 size 1400 performance: 0.874288
+MaxDifference 2.734344e+268 size 1500 performance: 0.647039
+MaxDifference 2.237523e+284 size 1600 performance: 0.587931
+MaxDifference nan size 1700 performance: 0.629983

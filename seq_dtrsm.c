@@ -1,8 +1,3 @@
-/* 
- * CS594 openmp homework
- * seq_dtrsm.c
- * Qinglei Cao
- */
 #include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
@@ -14,18 +9,11 @@
 #define B(i, j) B[(i)*N+(j)]
 #define B_mul(i, j) B_mul[(i)*N+(j)]
 
-/* 
- * solve A * X =  B, A is a lower or upper triangular matrix;
- * A is M*M matrix, X is M*N matrix, B is M*N matrix
- * In this homework, ignore transpose
- */ 
-
-/* forward substitution, A is lower triangular matrix */
 void forward(int M, int N, double *A, double *X, double *B){
   int i, j, k;
   double temp;
 
-  printf("lower triangular matrix\n");
+  //printf("lower triangular matrix\n");
   for(j=0; j<N; j++){
      X[j] = B[j]/A[0];
      for(i=1; i<M; i++){
@@ -38,12 +26,11 @@ void forward(int M, int N, double *A, double *X, double *B){
   }
 }
 
-/* backward substitution, A is upper triangular matrix */
 void backward(int M, int N, double *A, double *X, double *B){
   int i, j, k;
   double temp;
 
-  printf("upper triangular matrix\n");
+  //printf("upper triangular matrix\n");
   for(j=0; j<N; j++){
      X(N-1, j) = B(N-1, j)/A(N-1, N-1);
 
@@ -100,11 +87,11 @@ int main(int argc, char *argv[]){
   if(!strcmp(uplo, "L")){
      for(i=0; i<M; i++)
         for(j=0; j<=i; j++)
-           A(i, j) = (double)rand()/(double)(RAND_MAX/5); 
+           A(i, j) = (double)rand()/(double)(RAND_MAX/1); 
    }else if(!strcmp(uplo, "U")){ 
      for(i=0; i<M; i++)
         for(j=i; j<M; j++)
-           A(i, j) = (double)rand()/(double)(RAND_MAX/5);
+           A(i, j) = (double)rand()/(double)(RAND_MAX/1);
    }else{
  	printf("You should give L or U to set matrix\n");
 	exit(1);
@@ -112,7 +99,7 @@ int main(int argc, char *argv[]){
 
    for(i=0; i<M; i++)
      for(j=0; j<N; j++)
-        B(i, j) = (double)rand()/(double)(RAND_MAX/5);
+        B(i, j) = (double)rand()/(double)(RAND_MAX/1);
 
   /* my dtrsm */
   time_start = omp_get_wtime();
@@ -130,16 +117,18 @@ int main(int argc, char *argv[]){
     for(j = 0; j < N; j++ )
       for(k = 0; k < M; k++)
         B_mul(i, j) += A(i, k) * X(k, j);
-
-/*
-  puts("A:"); print_m(M, M, A);
-  puts("X:"); print_m(M, N, X);
-  puts("B:"); print_m(M, N, B);
-  puts("B_mul:"); print_m(M, N, B_mul);
-*/
-
-  printf("result: %d, %lf\n", M, 1.0e-9*flop/time);
-
+  //puts("A:"); print_m(M, M, A);
+  //puts("X:"); print_m(M, N, X);
+  //puts("B:"); print_m(M, N, B);
+  //puts("AX:"); print_m(M, N, B_mul);
+  
+  double diff=0.0;
+  for(i = 0; i < M; i++){
+      for(j = 0; j < N; j++)
+	{diff = (diff > fabs(B(i,j)-B_mul(i,j)))? diff: fabs(B(i,j)-B_mul(i,j));
+	}
+}
+  printf("MaxDifference %e size %d performance: %lf\n", diff, M, 1.0e-9*flop/time);
   free(A);
   free(B);
   free(B_mul);

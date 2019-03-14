@@ -1,0 +1,16 @@
+MaxDifference 8.305833e+186 threadNum 5 performance: 0.452858
+MaxDifference 8.305833e+186 threadNum 6 performance: 0.517656
+MaxDifference 8.305833e+186 threadNum 7 performance: 0.596197
+MaxDifference 8.305833e+186 threadNum 8 performance: 0.672829
+MaxDifference 8.305833e+186 threadNum 9 performance: 0.702100
+MaxDifference 8.305833e+186 threadNum 10 performance: 0.734125
+MaxDifference 8.305833e+186 threadNum 11 performance: 0.798361
+MaxDifference 8.305833e+186 threadNum 12 performance: 0.880766
+MaxDifference 8.305833e+186 threadNum 13 performance: 0.870963
+MaxDifference 8.305833e+186 threadNum 14 performance: 0.891106
+MaxDifference 8.305833e+186 threadNum 15 performance: 0.957398
+MaxDifference 8.305833e+186 threadNum 16 performance: 0.950927
+MaxDifference 8.305833e+186 threadNum 17 performance: 1.002344
+MaxDifference 8.305833e+186 threadNum 18 performance: 1.018280
+MaxDifference 8.305833e+186 threadNum 19 performance: 1.076542
+MaxDifference 8.305833e+186 threadNum 20 performance: 1.079075
